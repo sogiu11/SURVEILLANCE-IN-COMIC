@@ -66,6 +66,7 @@ function updateComic() {
         ['Agree', 'Neutral', 'Disagree'].forEach(choice => {
             const button = document.createElement('button');
             button.textContent = choice;
+            button.className = 'poll-button'; // Aggiungi classe per lo stile
             button.onclick = () => {
                 recordPoll(question, choice);
                 alert(`You selected "${choice}" for: ${question}`);
@@ -135,7 +136,9 @@ document.getElementById('submit-comment').addEventListener('click', () => {
 });
 
 updateComic();
+
+// Bottone "Give Consent" con reindirizzamento immediato
 document.getElementById('consent-button').addEventListener('click', () => {
-    console.log("Consent button clicked"); // Debug
-    window.location.href = 'summary.html'; // Reindirizza immediatamente al secondo sito
+    console.log("Consent button clicked");
+    window.location.href = 'summary.html'; // Reindirizza al secondo sito
 });
