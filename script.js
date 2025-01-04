@@ -1,4 +1,4 @@
-// Updated JavaScript with enhanced error handling and initialization
+// Updated JavaScript to address issues and ensure functionality
 
 const comics = [
     { 
@@ -39,7 +39,7 @@ const comics = [
     },
     { 
         src: 'comic5.jpg', 
-        caption: 'Fractured Privacy', 
+        caption: 'Fractured Privacy"**', 
         poll: [
             'Is privacy still a human right in a fully digital world?',
             'Can society survive without technology for a single day?',
@@ -48,38 +48,17 @@ const comics = [
     }
 ];
 
-// Inizializzazione del tracking dei dati
 let currentComicIndex = 0;
 let userPoints = 0;
-let trackingData = JSON.parse(localStorage.getItem('trackingData'));
-
-// Inizializza correttamente trackingData
-if (!trackingData || typeof trackingData !== 'object') {
-    trackingData = { comics: [], totalInteractions: 0, totalPoints: 0 };
-}
-
-// Assicura che trackingData.comics sia un array valido
-if (!Array.isArray(trackingData.comics)) {
-    trackingData.comics = [];
-}
+let trackingData = JSON.parse(localStorage.getItem('trackingData')) || { comics: [], totalInteractions: 0, totalPoints: 0 };
 
 function updateComic() {
     const comic = comics[currentComicIndex];
-    if (!comic) {
-        console.error(`Comic at index ${currentComicIndex} not found.`);
-        return;
-    }
-
     document.getElementById('current-comic').src = comic.src;
     document.getElementById('comic-caption').textContent = `Comic ${currentComicIndex + 1}: ${comic.caption}`;
 
     const pollContainer = document.getElementById('poll-container');
-    if (!pollContainer) {
-        console.error("Poll container not found!");
-        return;
-    }
-
-    pollContainer.innerHTML = ''; // Pulisci il contenitore dei poll
+    pollContainer.innerHTML = '';
 
     comic.poll.forEach(question => {
         const questionElem = document.createElement('p');
@@ -100,26 +79,11 @@ function updateComic() {
 }
 
 function recordPoll(question, response) {
-    console.log("Current Comic Index:", currentComicIndex);
-    console.log("Tracking Data Before:", trackingData);
-
-    // Assicura che trackingData.comics abbia un array valido
-    if (!Array.isArray(trackingData.comics)) {
-        trackingData.comics = [];
-    }
-
-    // Assicura che trackingData.comics[currentComicIndex] sia inizializzato
     if (!trackingData.comics[currentComicIndex]) {
-        trackingData.comics[currentComicIndex] = { pollAnswers: {}, comments: [], interactions: [] };
+        trackingData.comics[currentComicIndex] = { pollAnswers: {}, comments: [] };
     }
-
-    // Registra la risposta al sondaggio
     trackingData.comics[currentComicIndex].pollAnswers[question] = response;
-
-    // Salva i dati aggiornati in localStorage
     localStorage.setItem('trackingData', JSON.stringify(trackingData));
-
-    console.log("Tracking Data After:", trackingData);
 }
 
 function updatePoints(points) {
@@ -164,7 +128,7 @@ document.getElementById('submit-comment').addEventListener('click', () => {
         alert('Comment submitted!');
         updatePoints(5);
         if (!trackingData.comics[currentComicIndex]) {
-            trackingData.comics[currentComicIndex] = { pollAnswers: {}, comments: [], interactions: [] };
+            trackingData.comics[currentComicIndex] = { pollAnswers: {}, comments: [] };
         }
         trackingData.comics[currentComicIndex].comments.push(comment);
         trackingData.totalInteractions++;
@@ -174,13 +138,18 @@ document.getElementById('submit-comment').addEventListener('click', () => {
 
 updateComic();
 document.getElementById('consent-button').addEventListener('click', () => {
+    console.log("Consent button clicked"); // Debug
+
+    // Mostra l'immagine full-screen
     const fullscreenImage = document.getElementById('fullscreen-image');
     fullscreenImage.classList.remove('hidden');
 
+    // Dopo 3 secondi, applica lo zoom-in e reindirizza
     setTimeout(() => {
-        fullscreenImage.classList.add('hidden');
+        fullscreenImage.classList.add('hidden'); // Attiva lo zoom-in
         setTimeout(() => {
-            window.location.href = 'summary.html';
-        }, 1);
-    }, 6000);
+            console.log("Redirecting to summary.html"); // Debug
+            window.location.href = 'summary.html'; // Reindirizza al secondo sito
+        }, 1); // Tempo per completare lo zoom-in
+    }, 6000); // Tempo di visualizzazione iniziale
 });
