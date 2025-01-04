@@ -1,65 +1,186 @@
-// Retrieve Tracking Data from LocalStorage
-const trackingData = JSON.parse(localStorage.getItem('trackingData')) || { comics: [], totalInteractions: 0, totalPoints: 0 };
+// Updated JavaScript with enhanced error handling and initialization
 
-// Check if trackingData is valid
-if (!trackingData || typeof trackingData !== 'object') {
-    console.error("No valid tracking data found in localStorage.");
-}
-
-// Display Points
-const pointsDisplayElement = document.getElementById('points-display');
-const pointBarElement = document.getElementById('point-bar');
-if (trackingData.totalPoints !== undefined) {
-    pointsDisplayElement.textContent = `Points: ${trackingData.totalPoints}`;
-    pointBarElement.style.width = `${Math.min(trackingData.totalPoints, 100)}%`;
-
-    if (trackingData.totalPoints >= 100) {
-        pointBarElement.classList.add('complete');
+const comics = [
+    { 
+        src: 'comic1.jpg', 
+        caption: 'What Remains of Defiance?', 
+        poll: [
+            'Will the fight for freedom always remain a never-ending struggle?',
+            'Does excessive surveillance destroy urban communities?',
+            'Is it still important to resist when everything seems lost?'
+        ]
+    },
+    { 
+        src: 'comic2.jpg', 
+        caption: 'Surveillance Capitalism in Action', 
+        poll: [
+            'Is surveillance necessary even in peaceful places like the mountains?',
+            'Can meditation truly be free in a heavily monitored environment?',
+            'Is technology gradually diminishing our sense of personal freedom?'
+        ]
+    },
+    { 
+        src: 'comic3.jpg', 
+        caption: 'The Age of Algorithms', 
+        poll: [
+            'Should algorithms have control over education?',
+            'Is it possible to rediscover critical thinking in a world dominated by algorithmic optimization?',
+            'Is individual curiosity strong enough to challenge technological control?'
+        ]
+    },
+    { 
+        src: 'comic4.jpg', 
+        caption: 'The World of Tomorrow?', 
+        poll: [
+            'Do you believe that algorithms have too much control on our life?',
+            'Do you think a society like the one depicted in the comic is a realistic future scenario?',
+            'Can humanity reclaim its freedom of thought in a world dominated by surveillance?'
+        ]
+    },
+    { 
+        src: 'comic5.jpg', 
+        caption: 'Fractured Privacy', 
+        poll: [
+            'Is privacy still a human right in a fully digital world?',
+            'Can society survive without technology for a single day?',
+            'Are personal choices still personal in a monitored society?'
+        ]
     }
-} else {
-    pointsDisplayElement.textContent = `Points: 0`;
-    pointBarElement.style.width = '0%';
+];
+
+// Inizializzazione del tracking dei dati
+let currentComicIndex = 0;
+let userPoints = 0;
+let trackingData = JSON.parse(localStorage.getItem('trackingData'));
+
+// Inizializza correttamente trackingData
+if (!trackingData || typeof trackingData !== 'object') {
+    trackingData = { comics: [], totalInteractions: 0, totalPoints: 0 };
 }
 
-// Display Time Spent
-const timeSpentElement = document.getElementById('time-spent');
-if (trackingData.comics && Array.isArray(trackingData.comics)) {
-    const totalTimeSpent = trackingData.comics.reduce(
-        (sum, comic) => sum + (comic.timeSpent || 0),
-        0
-    );
-    timeSpentElement.textContent = `Total Time Spent: ${totalTimeSpent} seconds`;
-} else {
-    timeSpentElement.textContent = `Total Time Spent: 0 seconds`;
+// Assicura che trackingData.comics sia un array valido
+if (!Array.isArray(trackingData.comics)) {
+    trackingData.comics = [];
 }
 
-// Display Poll Responses
-const interactionSummaryElement = document.getElementById('interaction-summary');
-if (trackingData.comics && trackingData.comics.length > 0) {
-    interactionSummaryElement.textContent = trackingData.comics.map((comicData, index) => `
-Comic ${index + 1}:
-Poll Responses:
-${Object.entries(comicData.pollAnswers || {})
-    .map(([question, response]) => `  - ${question}: ${response}`)
-    .join('\n')}
-`).join('\n\n');
-} else {
-    interactionSummaryElement.textContent = "No poll responses recorded.";
+function updateComic() {
+    const comic = comics[currentComicIndex];
+    if (!comic) {
+        console.error(`Comic at index ${currentComicIndex} not found.`);
+        return;
+    }
+
+    document.getElementById('current-comic').src = comic.src;
+    document.getElementById('comic-caption').textContent = `Comic ${currentComicIndex + 1}: ${comic.caption}`;
+
+    const pollContainer = document.getElementById('poll-container');
+    if (!pollContainer) {
+        console.error("Poll container not found!");
+        return;
+    }
+
+    pollContainer.innerHTML = ''; // Pulisci il contenitore dei poll
+
+    comic.poll.forEach(question => {
+        const questionElem = document.createElement('p');
+        questionElem.textContent = question;
+        pollContainer.appendChild(questionElem);
+
+        ['Agree', 'Neutral', 'Disagree'].forEach(choice => {
+            const button = document.createElement('button');
+            button.textContent = choice;
+            button.onclick = () => {
+                recordPoll(question, choice);
+                alert(`You selected "${choice}" for: ${question}`);
+                updatePoints(10);
+            };
+            pollContainer.appendChild(button);
+        });
+    });
 }
 
-// Display Comments
-const commentSummaryElement = document.getElementById('comment-summary');
-if (trackingData.comics && trackingData.comics.length > 0) {
-    commentSummaryElement.textContent = trackingData.comics.map((comicData, index) => `
-Comic ${index + 1}:
-Comments:
-${comicData.comments && comicData.comments.length > 0
-        ? comicData.comments.map(comment => `  - ${comment}`).join('\n')
-        : "  - No comments"}
-`).join('\n\n');
-} else {
-    commentSummaryElement.textContent = "No comments recorded.";
+function recordPoll(question, response) {
+    console.log("Current Comic Index:", currentComicIndex);
+    console.log("Tracking Data Before:", trackingData);
+
+    // Assicura che trackingData.comics abbia un array valido
+    if (!Array.isArray(trackingData.comics)) {
+        trackingData.comics = [];
+    }
+
+    // Assicura che trackingData.comics[currentComicIndex] sia inizializzato
+    if (!trackingData.comics[currentComicIndex]) {
+        trackingData.comics[currentComicIndex] = { pollAnswers: {}, comments: [], interactions: [] };
+    }
+
+    // Registra la risposta al sondaggio
+    trackingData.comics[currentComicIndex].pollAnswers[question] = response;
+
+    // Salva i dati aggiornati in localStorage
+    localStorage.setItem('trackingData', JSON.stringify(trackingData));
+
+    console.log("Tracking Data After:", trackingData);
 }
 
-// Debugging Information
-console.log("Tracking Data:", trackingData);
+function updatePoints(points) {
+    userPoints += points;
+    trackingData.totalPoints = userPoints;
+    document.getElementById('points-display').textContent = `Points: ${userPoints}`;
+    const pointBar = document.getElementById('point-bar');
+    pointBar.style.width = `${Math.min(userPoints, 100)}%`;
+    if (userPoints >= 100) pointBar.classList.add('complete');
+    localStorage.setItem('trackingData', JSON.stringify(trackingData));
+}
+
+function recordReaction(type) {
+    alert(`You ${type}d this content!`);
+    updatePoints(type === 'like' ? 2 : 1);
+    trackingData.totalInteractions++;
+    localStorage.setItem('trackingData', JSON.stringify(trackingData));
+}
+
+document.getElementById('like-button').addEventListener('click', () => recordReaction('like'));
+document.getElementById('dislike-button').addEventListener('click', () => recordReaction('dislike'));
+
+document.getElementById('prev-button').addEventListener('click', () => {
+    currentComicIndex = (currentComicIndex - 1 + comics.length) % comics.length;
+    updateComic();
+});
+
+document.getElementById('next-button').addEventListener('click', () => {
+    currentComicIndex = (currentComicIndex + 1) % comics.length;
+    updateComic();
+});
+
+document.getElementById('submit-comment').addEventListener('click', () => {
+    const commentBox = document.getElementById('comment-box');
+    const comment = commentBox.value;
+    if (comment) {
+        const commentList = document.getElementById('comments-list');
+        const newComment = document.createElement('p');
+        newComment.textContent = comment;
+        commentList.appendChild(newComment);
+        commentBox.value = '';
+        alert('Comment submitted!');
+        updatePoints(5);
+        if (!trackingData.comics[currentComicIndex]) {
+            trackingData.comics[currentComicIndex] = { pollAnswers: {}, comments: [], interactions: [] };
+        }
+        trackingData.comics[currentComicIndex].comments.push(comment);
+        trackingData.totalInteractions++;
+        localStorage.setItem('trackingData', JSON.stringify(trackingData));
+    }
+});
+
+updateComic();
+document.getElementById('consent-button').addEventListener('click', () => {
+    const fullscreenImage = document.getElementById('fullscreen-image');
+    fullscreenImage.classList.remove('hidden');
+
+    setTimeout(() => {
+        fullscreenImage.classList.add('hidden');
+        setTimeout(() => {
+            window.location.href = 'summary.html';
+        }, 1);
+    }, 6000);
+});
