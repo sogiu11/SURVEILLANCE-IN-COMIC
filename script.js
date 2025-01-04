@@ -1,5 +1,3 @@
-// Updated JavaScript to address issues and ensure functionality
-
 const comics = [
     { 
         src: 'comic1.jpg', 
@@ -66,7 +64,6 @@ function updateComic() {
     pollContainer.innerHTML = ''; // Pulisci i vecchi contenuti del contenitore
 
     comic.poll.forEach(question => {
-        console.log("Creating poll for question:", question); // Log per il debug
         const questionElem = document.createElement('p');
         questionElem.textContent = question;
         pollContainer.appendChild(questionElem);
@@ -74,14 +71,16 @@ function updateComic() {
         ['Agree', 'Neutral', 'Disagree'].forEach(choice => {
             const button = document.createElement('button');
             button.textContent = choice;
+            button.classList.add('poll-button'); // Aggiunge una classe CSS opzionale
             button.onclick = () => {
-                console.log(`Button clicked for question: ${question}, choice: ${choice}`); // Log per il debug
                 recordPoll(question, choice);
                 alert(`You selected "${choice}" for: ${question}`);
                 updatePoints(10);
             };
             pollContainer.appendChild(button);
         });
+
+        console.log("Poll buttons created for:", question); // Log per il debug
     });
 }
 
@@ -152,16 +151,14 @@ updateComic();
 document.getElementById('consent-button').addEventListener('click', () => {
     console.log("Consent button clicked"); // Debug
 
-    // Mostra l'immagine full-screen
     const fullscreenImage = document.getElementById('fullscreen-image');
     fullscreenImage.classList.remove('hidden');
 
-    // Dopo 3 secondi, applica lo zoom-in e reindirizza
     setTimeout(() => {
-        fullscreenImage.classList.add('hidden'); // Attiva lo zoom-in
+        fullscreenImage.classList.add('hidden');
         setTimeout(() => {
-            console.log("Redirecting to summary.html"); // Debug
-            window.location.href = 'summary.html'; // Reindirizza al secondo sito
-        }, 1); // Tempo per completare lo zoom-in
-    }, 6000); // Tempo di visualizzazione iniziale
+            console.log("Redirecting to summary.html");
+            window.location.href = 'summary.html';
+        }, 1);
+    }, 6000);
 });
