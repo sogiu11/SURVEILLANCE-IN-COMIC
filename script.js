@@ -1,4 +1,4 @@
-// Updated JavaScript to address issues and ensure functionality
+// Updated JavaScript with enhanced error handling and initialization
 
 const comics = [
     { 
@@ -48,16 +48,17 @@ const comics = [
     }
 ];
 
-// Inizializza il tracciamento dei dati
+// Inizializzazione del tracking dei dati
 let currentComicIndex = 0;
 let userPoints = 0;
 let trackingData = JSON.parse(localStorage.getItem('trackingData'));
 
-// Se trackingData non è valido o mancano campi, inizializza correttamente
+// Inizializza correttamente trackingData
 if (!trackingData || typeof trackingData !== 'object') {
     trackingData = { comics: [], totalInteractions: 0, totalPoints: 0 };
 }
 
+// Assicura che trackingData.comics sia un array valido
 if (!Array.isArray(trackingData.comics)) {
     trackingData.comics = [];
 }
@@ -78,7 +79,7 @@ function updateComic() {
         return;
     }
 
-    pollContainer.innerHTML = ''; // Pulisce il contenitore dei poll
+    pollContainer.innerHTML = ''; // Pulisci il contenitore dei poll
 
     comic.poll.forEach(question => {
         const questionElem = document.createElement('p');
@@ -99,19 +100,26 @@ function updateComic() {
 }
 
 function recordPoll(question, response) {
+    console.log("Current Comic Index:", currentComicIndex);
+    console.log("Tracking Data Before:", trackingData);
+
     // Assicura che trackingData.comics abbia un array valido
     if (!Array.isArray(trackingData.comics)) {
         trackingData.comics = [];
     }
 
-    // Inizializza l'oggetto per il fumetto corrente se non esiste
+    // Assicura che trackingData.comics[currentComicIndex] sia inizializzato
     if (!trackingData.comics[currentComicIndex]) {
-        trackingData.comics[currentComicIndex] = { pollAnswers: {}, comments: [] };
+        trackingData.comics[currentComicIndex] = { pollAnswers: {}, comments: [], interactions: [] };
     }
 
-    // Registra la risposta
+    // Registra la risposta al sondaggio
     trackingData.comics[currentComicIndex].pollAnswers[question] = response;
+
+    // Salva i dati aggiornati in localStorage
     localStorage.setItem('trackingData', JSON.stringify(trackingData));
+
+    console.log("Tracking Data After:", trackingData);
 }
 
 function updatePoints(points) {
@@ -156,7 +164,7 @@ document.getElementById('submit-comment').addEventListener('click', () => {
         alert('Comment submitted!');
         updatePoints(5);
         if (!trackingData.comics[currentComicIndex]) {
-            trackingData.comics[currentComicIndex] = { pollAnswers: {}, comments: [] };
+            trackingData.comics[currentComicIndex] = { pollAnswers: {}, comments: [], interactions: [] };
         }
         trackingData.comics[currentComicIndex].comments.push(comment);
         trackingData.totalInteractions++;
