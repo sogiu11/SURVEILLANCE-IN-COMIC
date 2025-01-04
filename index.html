@@ -5,7 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Surveillance Awareness</title>
+    <!-- Collegamento al file CSS -->
     <link rel="stylesheet" href="styles.css">
+    <!-- Collegamento al file JavaScript -->
     <script defer src="script.js"></script>
 </head>
 
@@ -13,71 +15,66 @@
     <header>
         <h1>Surveillance Awareness</h1>
         <p>
-            Explore the world of surveillance capitalism through comics and interactivity. 
-            Welcome to the Visitor Surveillance Comic! Interact with polls, reactions, and comments 
-            to uncover a unique perspective on digital tracking. Your journey shapes the experience.
+            Explore the world of surveillance capitalism through comics and interactivity.
+            Welcome to the Visitor Surveillance Comic! Explore the project, interact with the reactions, polls,
+            and comments to uncover a unique perspective on digital tracking. Your journey shapes the experience.
         </p>
     </header>
 
     <main>
         <!-- Comic Viewer Section -->
-        <section id="comic-viewer" aria-label="Comic Viewer">
+        <section id="comic-viewer">
             <h2>Interactive Comic Viewer</h2>
             <div class="comic-display">
-                <img id="current-comic" src="comic1.jpg" alt="Comic 1: What Remains of Defiance">
+                <!-- Immagine corrente del fumetto -->
+                <img id="current-comic" src="comic1.jpg" alt="Comic 1">
+                <!-- Didascalia del fumetto -->
                 <p id="comic-caption">Comic 1: What Remains of Defiance?</p>
                 <div class="comic-navigation">
-                    <button id="prev-button" aria-label="Previous Comic">Previous</button>
-                    <button id="next-button" aria-label="Next Comic">Next</button>
+                    <!-- Pulsanti per navigare tra i fumetti -->
+                    <button id="prev-button">Previous</button>
+                    <button id="next-button">Next</button>
                 </div>
             </div>
         </section>
 
         <!-- Polls and Comments Section -->
         <section id="interaction-area">
-            <!-- Polls -->
             <div class="polls-section">
                 <h3>Polls</h3>
-                <div class="poll" id="poll-container">
-                    <!-- Poll questions will be injected dynamically -->
-                </div>
+                <!-- Contenitore per le domande dei sondaggi -->
+                <div id="poll-container"></div>
             </div>
-
-            <!-- Comments and Reactions -->
             <div class="comments-section">
                 <h3>Comments & Reactions</h3>
                 <p>Share your thoughts below!</p>
+                <!-- Area di input per i commenti -->
                 <textarea id="comment-box" placeholder="Leave a comment"></textarea>
-                <button id="submit-comment" aria-label="Submit Comment">Submit Comment</button>
-                <div id="comments-list" aria-label="Comments List">
-                    <!-- Comments will be appended dynamically -->
-                </div>
-                <div class="reactions" aria-label="Reactions">
-                    <button id="like-button" aria-label="Like this Comic">👍 Like</button>
-                    <button id="dislike-button" aria-label="Dislike this Comic">👎 Dislike</button>
+                <button id="submit-comment">Submit Comment</button>
+                <!-- Lista dei commenti -->
+                <div id="comments-list"></div>
+                <!-- Pulsanti per le reazioni -->
+                <div class="reactions">
+                    <button id="like-button">👍 Like</button>
+                    <button id="dislike-button">👎 Dislike</button>
                 </div>
             </div>
         </section>
 
         <!-- User Interaction Point Tracker -->
-        <section id="point-tracker" aria-label="Point Tracker">
+        <section id="point-tracker">
             <h3>Your Interaction Points</h3>
             <p>Earn points for every interaction!</p>
+            <!-- Contenitore della barra dei punti -->
             <div id="point-bar-container">
                 <div id="point-bar"></div>
             </div>
+            <!-- Visualizzazione dei punti -->
             <p id="points-display">Points: 0</p>
         </section>
 
-        <!-- Fullscreen Consent Image -->
-        <div id="fullscreen-image" class="hidden" aria-hidden="true">
-            <img src="consent-image.jpg" alt="Consent Screen Image">
-        </div>
-
         <!-- Consent Button -->
-        <button id="consent-button" aria-label="Provide Consent to Continue">
-            Give Consent
-        </button>
+        <button id="consent-button">Give Consent</button>
     </main>
 </body>
 
