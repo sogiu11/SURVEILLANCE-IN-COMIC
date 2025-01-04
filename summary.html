@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tracking Summary</title>
+    <link rel="stylesheet" href="tracker.css">
+    <script defer src="tracker.js"></script>
+</head>
+<body>
+
+    <header>
+        <h1>Tracking Summary</h1>
+        <p>Here’s what we tracked during your visit:</p>
+    </header>
+
+    <main id="summary-page">
+        <!-- Points Tracker -->
+        <section id="points-tracker">
+            <h2>Points Earned</h2>
+            <p id="points-display">Points: 0</p>
+            <div id="point-bar-container">
+                <div id="point-bar"></div>
+            </div>
+        </section>
+
+        <!-- Time Spent -->
+        <section id="time-summary">
+            <h2>Time Spent</h2>
+            <p id="time-spent">Total Time Spent: 0 seconds</p>
+        </section>
+
+        <!-- Interactions -->
+        <div class="summary-category" id="interactions-column">
+            <h2>Poll Responses</h2>
+            <pre id="interaction-summary"></pre>
+        </div>
+
+        <!-- Comments -->
+        <div class="summary-category" id="comments-column">
+            <h2>Comments</h2>
+            <pre id="comment-summary"></pre>
+        </div>
+    </main>
+    <a href="index.html" class="button">Back to Main Page</a>
+</body>
+</html>
