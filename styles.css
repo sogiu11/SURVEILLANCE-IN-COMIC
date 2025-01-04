@@ -119,9 +119,9 @@ header p {
     border-radius: 5px;
     cursor: pointer;
     transition: background 0.3s ease;
-    display: inline-block; /* Pulsanti in linea */
+    display: inline-block;
     text-align: center;
-    min-width: 100px; /* Imposta larghezza minima per uniformità */
+    min-width: 100px;
 }
 
 .poll button:hover, .poll button:focus {
@@ -222,7 +222,7 @@ button:hover, button:focus {
 }
 
 #point-bar.complete {
-    background-color: #2196f3; /* Change to blue when complete */
+    background-color: #2196f3;
 }
 
 #points-display {
@@ -261,9 +261,9 @@ button:hover, button:focus {
     justify-content: center;
     align-items: center;
     z-index: 1000;
-    transition: transform 3s ease-in-out, opacity 3s ease-in-out;
-    opacity: 1;
-    transform: scale(1); /* Stato iniziale (nessun zoom) */
+    transition: opacity 3s ease-in-out;
+    opacity: 0;
+    visibility: hidden;
 }
 
 #fullscreen-image img {
@@ -273,8 +273,19 @@ button:hover, button:focus {
     transition: transform 3s ease-in-out;
 }
 
-#fullscreen-image.hidden {
-    opacity: 0;
-    transform: scale(2); /* Zoom-in all'interno */
-    visibility: hidden;
+#fullscreen-image.show {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1.2);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    #interaction-area {
+        grid-template-columns: 1fr;
+    }
+
+    .polls-section, .comments-section {
+        width: 100%;
+    }
 }
