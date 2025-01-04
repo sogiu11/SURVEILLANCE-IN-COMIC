@@ -1,3 +1,5 @@
+// Updated JavaScript with enhanced error handling and initialization
+
 const comics = [
     { 
         src: 'comic1.jpg', 
@@ -46,19 +48,30 @@ const comics = [
     }
 ];
 
+// Inizializzazione del tracking dei dati
 let currentComicIndex = 0;
-let trackingData = JSON.parse(localStorage.getItem('trackingData')) || { comics: [], totalInteractions: 0, totalPoints: 0 };
-let userPoints = trackingData.totalPoints || 0;
+let userPoints = 0;
+let trackingData = JSON.parse(localStorage.getItem('trackingData'));
+
+// Inizializza correttamente trackingData
+if (!trackingData || typeof trackingData !== 'object') {
+    trackingData = { comics: [], totalInteractions: 0, totalPoints: 0 };
+}
+
+// Assicura che trackingData.comics sia un array valido
+if (!Array.isArray(trackingData.comics)) {
+    trackingData.comics = [];
+}
 
 function updateComic() {
     const comic = comics[currentComicIndex];
     if (!comic) {
-        console.error(`Comic at index ${currentComicIndex} not found.`);
+        console.error(Comic at index ${currentComicIndex} not found.);
         return;
     }
 
     document.getElementById('current-comic').src = comic.src;
-    document.getElementById('comic-caption').textContent = `Comic ${currentComicIndex + 1}: ${comic.caption}`;
+    document.getElementById('comic-caption').textContent = Comic ${currentComicIndex + 1}: ${comic.caption};
 
     const pollContainer = document.getElementById('poll-container');
     if (!pollContainer) {
@@ -78,7 +91,7 @@ function updateComic() {
             button.textContent = choice;
             button.onclick = () => {
                 recordPoll(question, choice);
-                alert(`You selected "${choice}" for: ${question}`);
+                alert(You selected "${choice}" for: ${question});
                 updatePoints(10);
             };
             pollContainer.appendChild(button);
@@ -87,25 +100,40 @@ function updateComic() {
 }
 
 function recordPoll(question, response) {
+    console.log("Current Comic Index:", currentComicIndex);
+    console.log("Tracking Data Before:", trackingData);
+
+    // Assicura che trackingData.comics abbia un array valido
+    if (!Array.isArray(trackingData.comics)) {
+        trackingData.comics = [];
+    }
+
+    // Assicura che trackingData.comics[currentComicIndex] sia inizializzato
     if (!trackingData.comics[currentComicIndex]) {
         trackingData.comics[currentComicIndex] = { pollAnswers: {}, comments: [], interactions: [] };
     }
+
+    // Registra la risposta al sondaggio
     trackingData.comics[currentComicIndex].pollAnswers[question] = response;
+
+    // Salva i dati aggiornati in localStorage
     localStorage.setItem('trackingData', JSON.stringify(trackingData));
+
+    console.log("Tracking Data After:", trackingData);
 }
 
 function updatePoints(points) {
     userPoints += points;
     trackingData.totalPoints = userPoints;
-    document.getElementById('points-display').textContent = `Points: ${userPoints}`;
+    document.getElementById('points-display').textContent = Points: ${userPoints};
     const pointBar = document.getElementById('point-bar');
-    pointBar.style.width = `${Math.min(userPoints, 100)}%`;
+    pointBar.style.width = ${Math.min(userPoints, 100)}%;
     if (userPoints >= 100) pointBar.classList.add('complete');
     localStorage.setItem('trackingData', JSON.stringify(trackingData));
 }
 
 function recordReaction(type) {
-    alert(`You ${type}d this content!`);
+    alert(You ${type}d this content!);
     updatePoints(type === 'like' ? 2 : 1);
     trackingData.totalInteractions++;
     localStorage.setItem('trackingData', JSON.stringify(trackingData));
@@ -144,22 +172,15 @@ document.getElementById('submit-comment').addEventListener('click', () => {
     }
 });
 
+updateComic();
 document.getElementById('consent-button').addEventListener('click', () => {
     const fullscreenImage = document.getElementById('fullscreen-image');
-    if (!fullscreenImage) {
-        console.error("Fullscreen image element not found!");
-        return;
-    }
-
-    fullscreenImage.classList.remove('hidden'); // Mostra l'immagine
+    fullscreenImage.classList.remove('hidden');
 
     setTimeout(() => {
-        fullscreenImage.classList.add('hidden'); // Nasconde l'immagine con effetto
+        fullscreenImage.classList.add('hidden');
         setTimeout(() => {
-            window.location.href = 'summary.html'; // Reindirizza alla pagina di riepilogo
-        }, 1000); // Tempo per completare l'animazione
-    }, 3000); // Mostra l'immagine per 3 secondi
+            window.location.href = 'summary.html';
+        }, 1);
+    }, 6000);
 });
-
-// Avvia con il primo fumetto
-updateComic();
