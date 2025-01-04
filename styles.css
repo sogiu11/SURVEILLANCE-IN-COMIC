@@ -78,8 +78,7 @@ header p {
     transition: background 0.3s ease;
 }
 
-.comic-navigation button:hover,
-.comic-navigation button:focus {
+.comic-navigation button:hover, .comic-navigation button:focus {
     background: #45a049;
     outline: none;
 }
@@ -93,16 +92,14 @@ header p {
     margin: 2rem 0;
 }
 
-.polls-section,
-.comments-section {
+.polls-section, .comments-section {
     background: #fff;
     padding: 1rem;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.polls-section h3,
-.comments-section h3 {
+.polls-section h3, .comments-section h3 {
     margin-top: 0;
     color: #4caf50;
 }
@@ -122,10 +119,12 @@ header p {
     border-radius: 5px;
     cursor: pointer;
     transition: background 0.3s ease;
+    display: inline-block; /* Pulsanti in linea */
+    text-align: center;
+    min-width: 100px; /* Imposta larghezza minima per uniformità */
 }
 
-.poll button:hover,
-.poll button:focus {
+.poll button:hover, .poll button:focus {
     background: #45a049;
     outline: none;
 }
@@ -160,8 +159,7 @@ button {
     transition: background 0.3s ease;
 }
 
-button:hover,
-button:focus {
+button:hover, button:focus {
     background: #45a049;
     outline: none;
 }
@@ -188,8 +186,7 @@ button:focus {
     transition: background 0.3s ease;
 }
 
-.reactions button:hover,
-.reactions button:focus {
+.reactions button:hover, .reactions button:focus {
     background: #d6d6d6;
     outline: none;
 }
@@ -225,7 +222,7 @@ button:focus {
 }
 
 #point-bar.complete {
-    background-color: #2196f3; /* Cambia in blu quando completo */
+    background-color: #2196f3; /* Change to blue when complete */
 }
 
 #points-display {
@@ -247,8 +244,7 @@ button:focus {
     transition: background 0.3s ease;
 }
 
-#consent-button:hover,
-#consent-button:focus {
+#consent-button:hover, #consent-button:focus {
     background: #45a049;
     outline: none;
 }
@@ -266,19 +262,19 @@ button:focus {
     align-items: center;
     z-index: 1000;
     transition: transform 3s ease-in-out, opacity 3s ease-in-out;
-    opacity: 0;
-    visibility: hidden;
-    transform: scale(1);
+    opacity: 1;
+    transform: scale(1); /* Stato iniziale (nessun zoom) */
 }
 
 #fullscreen-image img {
     max-width: 80%;
     max-height: 80%;
     border-radius: 10px;
+    transition: transform 3s ease-in-out;
 }
 
-#fullscreen-image.visible {
-    opacity: 1;
-    visibility: visible;
-    transform: scale(2);
+#fullscreen-image.hidden {
+    opacity: 0;
+    transform: scale(2); /* Zoom-in all'interno */
+    visibility: hidden;
 }
