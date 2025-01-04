@@ -87,14 +87,14 @@ header p {
 #interaction-area {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1rem;
-    padding: 1rem;
+    gap: 1.5rem;
+    padding: 1.5rem;
     margin: 2rem 0;
 }
 
 .polls-section, .comments-section {
     background: #fff;
-    padding: 1rem;
+    padding: 1.5rem;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
@@ -102,6 +102,8 @@ header p {
 .polls-section h3, .comments-section h3 {
     margin-top: 0;
     color: #4caf50;
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
 }
 
 /* Polls */
@@ -109,8 +111,15 @@ header p {
     margin-bottom: 1rem;
 }
 
+.poll p {
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
 .poll button {
-    margin: 0.5rem;
+    display: inline-block;
+    margin: 0.3rem;
     padding: 0.5rem 1rem;
     font-size: 1rem;
     background: #4caf50;
@@ -118,25 +127,17 @@ header p {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    transition: background 0.3s ease;
-    display: inline-block;
-    text-align: center;
-    min-width: 100px;
+    transition: background 0.3s ease, transform 0.2s;
 }
 
 .poll button:hover, .poll button:focus {
     background: #45a049;
+    transform: scale(1.05);
     outline: none;
 }
 
 /* Comments Section */
-.comments-section p {
-    font-size: 0.9rem;
-    color: #555;
-    margin-bottom: 0.5rem;
-}
-
-textarea {
+.comments-section textarea {
     width: 100%;
     height: 80px;
     margin-bottom: 1rem;
@@ -147,7 +148,7 @@ textarea {
     resize: none;
 }
 
-button {
+.comments-section button {
     display: inline-block;
     margin: 0.5rem 0;
     padding: 0.5rem 1rem;
@@ -159,7 +160,7 @@ button {
     transition: background 0.3s ease;
 }
 
-button:hover, button:focus {
+.comments-section button:hover, button:focus {
     background: #45a049;
     outline: none;
 }
