@@ -95,10 +95,15 @@ function recordPoll(question, response) {
     console.log("Current Comic Index:", currentComicIndex);
     console.log("Tracking Data Before:", trackingData);
 
+    // Assicurati che l'array trackingData.comics abbia un elemento per currentComicIndex
     if (!trackingData.comics[currentComicIndex]) {
         trackingData.comics[currentComicIndex] = { pollAnswers: {}, interactions: [] };
     }
+
+    // Registra la risposta del sondaggio
     trackingData.comics[currentComicIndex].pollAnswers[question] = response;
+
+    // Salva i dati aggiornati in localStorage
     localStorage.setItem('trackingData', JSON.stringify(trackingData));
 
     console.log("Tracking Data After:", trackingData);
