@@ -5,20 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Surveillance Awareness</title>
-    <!-- Collegamento al file CSS -->
     <link rel="stylesheet" href="styles.css">
-    <!-- Collegamento al file JavaScript -->
     <script defer src="script.js"></script>
 </head>
 
 <body>
     <header>
         <h1>Surveillance Awareness</h1>
-        <p>
-            Explore the world of surveillance capitalism through comics and interactivity.
-            Welcome to the Visitor Surveillance Comic! Explore the project, interact with the reactions, polls,
-            and comments to uncover a unique perspective on digital tracking. Your journey shapes the experience.
-        </p>
+        <p>Explore the world of surveillance capitalism through comics and interactivity. Your journey shapes the experience.</p>
     </header>
 
     <main>
@@ -26,12 +20,9 @@
         <section id="comic-viewer">
             <h2>Interactive Comic Viewer</h2>
             <div class="comic-display">
-                <!-- Immagine corrente del fumetto -->
                 <img id="current-comic" src="comic1.jpg" alt="Comic 1">
-                <!-- Didascalia del fumetto -->
                 <p id="comic-caption">Comic 1: What Remains of Defiance?</p>
                 <div class="comic-navigation">
-                    <!-- Pulsanti per navigare tra i fumetti -->
                     <button id="prev-button">Previous</button>
                     <button id="next-button">Next</button>
                 </div>
@@ -42,18 +33,14 @@
         <section id="interaction-area">
             <div class="polls-section">
                 <h3>Polls</h3>
-                <!-- Contenitore per le domande dei sondaggi -->
-                <div id="poll-container"></div>
+                <div class="poll" id="poll-container"></div>
             </div>
             <div class="comments-section">
                 <h3>Comments & Reactions</h3>
                 <p>Share your thoughts below!</p>
-                <!-- Area di input per i commenti -->
                 <textarea id="comment-box" placeholder="Leave a comment"></textarea>
                 <button id="submit-comment">Submit Comment</button>
-                <!-- Lista dei commenti -->
                 <div id="comments-list"></div>
-                <!-- Pulsanti per le reazioni -->
                 <div class="reactions">
                     <button id="like-button">👍 Like</button>
                     <button id="dislike-button">👎 Dislike</button>
@@ -65,14 +52,17 @@
         <section id="point-tracker">
             <h3>Your Interaction Points</h3>
             <p>Earn points for every interaction!</p>
-            <!-- Contenitore della barra dei punti -->
             <div id="point-bar-container">
                 <div id="point-bar"></div>
             </div>
-            <!-- Visualizzazione dei punti -->
             <p id="points-display">Points: 0</p>
         </section>
 
+        <!-- Fullscreen Image -->
+        <div id="fullscreen-image" class="hidden">
+            <img src="consent-image.jpg" alt="Consent Image">
+        </div>
+    
         <!-- Consent Button -->
         <button id="consent-button">Give Consent</button>
     </main>
