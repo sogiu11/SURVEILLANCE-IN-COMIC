@@ -58,9 +58,15 @@ function updateComic() {
     document.getElementById('comic-caption').textContent = `Comic ${currentComicIndex + 1}: ${comic.caption}`;
 
     const pollContainer = document.getElementById('poll-container');
-    pollContainer.innerHTML = '';
+    if (!pollContainer) {
+        console.error("Poll container not found!"); // Log di errore se il contenitore non esiste
+        return; // Ferma l'esecuzione della funzione
+    }
+
+    pollContainer.innerHTML = ''; // Pulisci i vecchi contenuti del contenitore
 
     comic.poll.forEach(question => {
+        console.log("Creating poll for question:", question); // Log per il debug
         const questionElem = document.createElement('p');
         questionElem.textContent = question;
         pollContainer.appendChild(questionElem);
@@ -69,6 +75,7 @@ function updateComic() {
             const button = document.createElement('button');
             button.textContent = choice;
             button.onclick = () => {
+                console.log(`Button clicked for question: ${question}, choice: ${choice}`); // Log per il debug
                 recordPoll(question, choice);
                 alert(`You selected "${choice}" for: ${question}`);
                 updatePoints(10);
@@ -77,7 +84,7 @@ function updateComic() {
         });
     });
 }
-console.log("Poll buttons created for:", question);
+
 function recordPoll(question, response) {
     console.log("Current Comic Index:", currentComicIndex);
     console.log("Tracking Data Before:", trackingData);
