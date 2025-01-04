@@ -135,3 +135,7 @@ document.getElementById('submit-comment').addEventListener('click', () => {
 });
 
 updateComic();
+document.getElementById('consent-button').addEventListener('click', () => {
+    console.log("Consent button clicked"); // Debug
+    window.location.href = 'summary.html'; // Reindirizza immediatamente al secondo sito
+});
