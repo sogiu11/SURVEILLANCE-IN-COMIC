@@ -1,3 +1,5 @@
+// Updated JavaScript with enhanced error handling and initialization
+
 const comics = [
     { 
         src: 'comic1.jpg', 
@@ -46,52 +48,78 @@ const comics = [
     }
 ];
 
+// Inizializzazione del tracking dei dati
 let currentComicIndex = 0;
-let trackingData = JSON.parse(localStorage.getItem('trackingData')) || { comics: [], totalInteractions: 0, totalPoints: 0 };
-let userPoints = trackingData.totalPoints || 0;
+let userPoints = 0;
+let trackingData = JSON.parse(localStorage.getItem('trackingData'));
+
+// Inizializza correttamente trackingData
+if (!trackingData || typeof trackingData !== 'object') {
+    trackingData = { comics: [], totalInteractions: 0, totalPoints: 0 };
+}
+
+// Assicura che trackingData.comics sia un array valido
+if (!Array.isArray(trackingData.comics)) {
+    trackingData.comics = [];
+}
 
 function updateComic() {
     const comic = comics[currentComicIndex];
-    const comicImage = document.getElementById('current-comic');
-    const comicCaption = document.getElementById('comic-caption');
+    if (!comic) {
+        console.error(`Comic at index ${currentComicIndex} not found.`);
+        return;
+    }
+
+    document.getElementById('current-comic').src = comic.src;
+    document.getElementById('comic-caption').textContent = `Comic ${currentComicIndex + 1}: ${comic.caption}`;
+
     const pollContainer = document.getElementById('poll-container');
-
-    // Aggiorna immagine e didascalia
-    if (comicImage && comicCaption) {
-        comicImage.src = comic.src;
-        comicImage.alt = comic.caption;
-        comicCaption.textContent = `Comic ${currentComicIndex + 1}: ${comic.caption}`;
+    if (!pollContainer) {
+        console.error("Poll container not found!");
+        return;
     }
 
-    // Resetta e popola il contenitore dei poll
-    if (pollContainer) {
-        pollContainer.innerHTML = ''; // Pulisci il contenuto precedente
+    pollContainer.innerHTML = ''; // Pulisci il contenitore dei poll
 
-        comic.poll.forEach(question => {
-            const questionElem = document.createElement('p');
-            questionElem.textContent = question;
-            pollContainer.appendChild(questionElem);
+    comic.poll.forEach(question => {
+        const questionElem = document.createElement('p');
+        questionElem.textContent = question;
+        pollContainer.appendChild(questionElem);
 
-            ['Agree', 'Neutral', 'Disagree'].forEach(choice => {
-                const button = document.createElement('button');
-                button.textContent = choice;
-                button.onclick = () => {
-                    recordPoll(question, choice);
-                    alert(`You selected "${choice}" for: ${question}`);
-                    updatePoints(10);
-                };
-                pollContainer.appendChild(button);
-            });
+        ['Agree', 'Neutral', 'Disagree'].forEach(choice => {
+            const button = document.createElement('button');
+            button.textContent = choice;
+            button.onclick = () => {
+                recordPoll(question, choice);
+                alert(`You selected "${choice}" for: ${question}`);
+                updatePoints(10);
+            };
+            pollContainer.appendChild(button);
         });
-    }
+    });
 }
 
 function recordPoll(question, response) {
-    if (!trackingData.comics[currentComicIndex]) {
-        trackingData.comics[currentComicIndex] = { pollAnswers: {}, comments: [], timeSpent: 0 };
+    console.log("Current Comic Index:", currentComicIndex);
+    console.log("Tracking Data Before:", trackingData);
+
+    // Assicura che trackingData.comics abbia un array valido
+    if (!Array.isArray(trackingData.comics)) {
+        trackingData.comics = [];
     }
+
+    // Assicura che trackingData.comics[currentComicIndex] sia inizializzato
+    if (!trackingData.comics[currentComicIndex]) {
+        trackingData.comics[currentComicIndex] = { pollAnswers: {}, comments: [], interactions: [] };
+    }
+
+    // Registra la risposta al sondaggio
     trackingData.comics[currentComicIndex].pollAnswers[question] = response;
+
+    // Salva i dati aggiornati in localStorage
     localStorage.setItem('trackingData', JSON.stringify(trackingData));
+
+    console.log("Tracking Data After:", trackingData);
 }
 
 function updatePoints(points) {
@@ -136,7 +164,7 @@ document.getElementById('submit-comment').addEventListener('click', () => {
         alert('Comment submitted!');
         updatePoints(5);
         if (!trackingData.comics[currentComicIndex]) {
-            trackingData.comics[currentComicIndex] = { pollAnswers: {}, comments: [], timeSpent: 0 };
+            trackingData.comics[currentComicIndex] = { pollAnswers: {}, comments: [], interactions: [] };
         }
         trackingData.comics[currentComicIndex].comments.push(comment);
         trackingData.totalInteractions++;
@@ -144,24 +172,15 @@ document.getElementById('submit-comment').addEventListener('click', () => {
     }
 });
 
-document.getElementById('consent-button').addEventListener('click', () => {
-    console.log("Consent button clicked"); // Debug
-    const fullscreenImage = document.getElementById('fullscreen-image');
-    if (fullscreenImage) {
-        fullscreenImage.classList.remove('hidden'); // Mostra l'immagine
-        fullscreenImage.style.transform = 'scale(1)'; // Assicurati che non sia ingrandita inizialmente
-
-        // Esegui lo zoom-in e reindirizza
-        setTimeout(() => {
-            fullscreenImage.classList.add('hidden'); // Nasconde l'immagine
-            setTimeout(() => {
-                console.log("Redirecting to summary.html"); // Debug
-                window.location.href = 'summary.html'; // Reindirizza
-            }, 1000); // Tempo per completare l'animazione
-        }, 6000); // Mostra per 6 secondi
-    } else {
-        console.error("Fullscreen image element not found!");
-    }
-});
-
 updateComic();
+document.getElementById('consent-button').addEventListener('click', () => {
+    const fullscreenImage = document.getElementById('fullscreen-image');
+    fullscreenImage.classList.remove('hidden');
+
+    setTimeout(() => {
+        fullscreenImage.classList.add('hidden');
+        setTimeout(() => {
+            window.location.href = 'summary.html';
+        }, 1);
+    }, 6000);
+});
