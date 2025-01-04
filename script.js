@@ -1,5 +1,3 @@
-// Updated JavaScript with enhanced error handling and initialization
-
 const comics = [
     { 
         src: 'comic1.jpg', 
@@ -48,20 +46,9 @@ const comics = [
     }
 ];
 
-// Inizializzazione del tracking dei dati
 let currentComicIndex = 0;
-let userPoints = 0;
-let trackingData = JSON.parse(localStorage.getItem('trackingData'));
-
-// Inizializza correttamente trackingData
-if (!trackingData || typeof trackingData !== 'object') {
-    trackingData = { comics: [], totalInteractions: 0, totalPoints: 0 };
-}
-
-// Assicura che trackingData.comics sia un array valido
-if (!Array.isArray(trackingData.comics)) {
-    trackingData.comics = [];
-}
+let trackingData = JSON.parse(localStorage.getItem('trackingData')) || { comics: [], totalInteractions: 0, totalPoints: 0 };
+let userPoints = trackingData.totalPoints || 0;
 
 function updateComic() {
     const comic = comics[currentComicIndex];
@@ -100,26 +87,11 @@ function updateComic() {
 }
 
 function recordPoll(question, response) {
-    console.log("Current Comic Index:", currentComicIndex);
-    console.log("Tracking Data Before:", trackingData);
-
-    // Assicura che trackingData.comics abbia un array valido
-    if (!Array.isArray(trackingData.comics)) {
-        trackingData.comics = [];
-    }
-
-    // Assicura che trackingData.comics[currentComicIndex] sia inizializzato
     if (!trackingData.comics[currentComicIndex]) {
         trackingData.comics[currentComicIndex] = { pollAnswers: {}, comments: [], interactions: [] };
     }
-
-    // Registra la risposta al sondaggio
     trackingData.comics[currentComicIndex].pollAnswers[question] = response;
-
-    // Salva i dati aggiornati in localStorage
     localStorage.setItem('trackingData', JSON.stringify(trackingData));
-
-    console.log("Tracking Data After:", trackingData);
 }
 
 function updatePoints(points) {
@@ -172,15 +144,22 @@ document.getElementById('submit-comment').addEventListener('click', () => {
     }
 });
 
-updateComic();
 document.getElementById('consent-button').addEventListener('click', () => {
     const fullscreenImage = document.getElementById('fullscreen-image');
-    fullscreenImage.classList.remove('hidden');
+    if (!fullscreenImage) {
+        console.error("Fullscreen image element not found!");
+        return;
+    }
+
+    fullscreenImage.classList.remove('hidden'); // Mostra l'immagine
 
     setTimeout(() => {
-        fullscreenImage.classList.add('hidden');
+        fullscreenImage.classList.add('hidden'); // Nasconde l'immagine con effetto
         setTimeout(() => {
-            window.location.href = 'summary.html';
-        }, 1);
-    }, 6000);
+            window.location.href = 'summary.html'; // Reindirizza alla pagina di riepilogo
+        }, 1000); // Tempo per completare l'animazione
+    }, 3000); // Mostra l'immagine per 3 secondi
 });
+
+// Avvia con il primo fumetto
+updateComic();
