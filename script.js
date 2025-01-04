@@ -37,7 +37,7 @@ const comics = [
     },
     { 
         src: 'comic5.jpg', 
-        caption: 'Fractured Privacy"**', 
+        caption: 'Fractured Privacy', 
         poll: [
             'Is privacy still a human right in a fully digital world?',
             'Can society survive without technology for a single day?',
@@ -52,18 +52,22 @@ let trackingData = JSON.parse(localStorage.getItem('trackingData')) || { comics:
 
 function updateComic() {
     const comic = comics[currentComicIndex];
+    console.log("Updating comic:", comic);
+
     document.getElementById('current-comic').src = comic.src;
     document.getElementById('comic-caption').textContent = `Comic ${currentComicIndex + 1}: ${comic.caption}`;
 
     const pollContainer = document.getElementById('poll-container');
     if (!pollContainer) {
-        console.error("Poll container not found!"); // Log di errore se il contenitore non esiste
-        return; // Ferma l'esecuzione della funzione
+        console.error("Poll container not found!");
+        return;
     }
 
-    pollContainer.innerHTML = ''; // Pulisci i vecchi contenuti del contenitore
+    pollContainer.innerHTML = ''; // Pulisci i vecchi poll
 
     comic.poll.forEach(question => {
+        console.log("Creating poll for question:", question);
+
         const questionElem = document.createElement('p');
         questionElem.textContent = question;
         pollContainer.appendChild(questionElem);
@@ -71,16 +75,19 @@ function updateComic() {
         ['Agree', 'Neutral', 'Disagree'].forEach(choice => {
             const button = document.createElement('button');
             button.textContent = choice;
-            button.classList.add('poll-button'); // Aggiunge una classe CSS opzionale
-            button.onclick = () => {
-                recordPoll(question, choice);
-                alert(`You selected "${choice}" for: ${question}`);
-                updatePoints(10);
-            };
+
+            // Passa la domanda come chiusura
+            button.onclick = (function(q) {
+                return () => {
+                    console.log(`Button clicked for question: ${q}, choice: ${choice}`);
+                    recordPoll(q, choice);
+                    alert(`You selected "${choice}" for: ${q}`);
+                    updatePoints(10);
+                };
+            })(question);
+
             pollContainer.appendChild(button);
         });
-
-        console.log("Poll buttons created for:", question); // Log per il debug
     });
 }
 
