@@ -227,7 +227,6 @@ button:hover, button:focus {
     color: #555;
 }
 
-/* Consent Button */
 #consent-button {
     display: block;
     margin: 2rem auto;
@@ -241,9 +240,8 @@ button:hover, button:focus {
     transition: background 0.3s ease;
 }
 
-#consent-button:hover, #consent-button:focus {
+#consent-button:hover {
     background: #45a049;
-    outline: none;
 }
 
 /* Responsive Design */
