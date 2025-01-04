@@ -1,3 +1,5 @@
+// Updated JavaScript to address issues and ensure functionality
+
 const comics = [
     { 
         src: 'comic1.jpg', 
@@ -46,12 +48,18 @@ const comics = [
     }
 ];
 
+// Inizializza il tracciamento dei dati
 let currentComicIndex = 0;
 let userPoints = 0;
 let trackingData = JSON.parse(localStorage.getItem('trackingData'));
 
+// Se trackingData non è valido o mancano campi, inizializza correttamente
 if (!trackingData || typeof trackingData !== 'object') {
     trackingData = { comics: [], totalInteractions: 0, totalPoints: 0 };
+}
+
+if (!Array.isArray(trackingData.comics)) {
+    trackingData.comics = [];
 }
 
 function updateComic() {
@@ -60,8 +68,6 @@ function updateComic() {
         console.error(`Comic at index ${currentComicIndex} not found.`);
         return;
     }
-
-    console.log("Updating comic:", comic);
 
     document.getElementById('current-comic').src = comic.src;
     document.getElementById('comic-caption').textContent = `Comic ${currentComicIndex + 1}: ${comic.caption}`;
@@ -72,11 +78,9 @@ function updateComic() {
         return;
     }
 
-    pollContainer.innerHTML = ''; // Pulisci i vecchi poll
+    pollContainer.innerHTML = ''; // Pulisce il contenitore dei poll
 
     comic.poll.forEach(question => {
-        console.log("Creating poll for question:", question);
-
         const questionElem = document.createElement('p');
         questionElem.textContent = question;
         pollContainer.appendChild(questionElem);
@@ -84,44 +88,32 @@ function updateComic() {
         ['Agree', 'Neutral', 'Disagree'].forEach(choice => {
             const button = document.createElement('button');
             button.textContent = choice;
-
-            // Passa la domanda come chiusura
-            button.onclick = (function(q) {
-                return () => {
-                    console.log(`Button clicked for question: ${q}, choice: ${choice}`);
-                    recordPoll(q, choice);
-                    alert(`You selected "${choice}" for: ${q}`);
-                    updatePoints(10);
-                };
-            })(question);
-
+            button.onclick = () => {
+                recordPoll(question, choice);
+                alert(`You selected "${choice}" for: ${question}`);
+                updatePoints(10);
+            };
             pollContainer.appendChild(button);
         });
     });
 }
 
 function recordPoll(question, response) {
-    console.log("Current Comic Index:", currentComicIndex);
-    console.log("Tracking Data Before:", trackingData);
-
-    // Assicurati che trackingData.comics sia un array
+    // Assicura che trackingData.comics abbia un array valido
     if (!Array.isArray(trackingData.comics)) {
         trackingData.comics = [];
     }
 
-    // Assicurati che esista un oggetto per il currentComicIndex
+    // Inizializza l'oggetto per il fumetto corrente se non esiste
     if (!trackingData.comics[currentComicIndex]) {
-        trackingData.comics[currentComicIndex] = { pollAnswers: {}, interactions: [] };
+        trackingData.comics[currentComicIndex] = { pollAnswers: {}, comments: [] };
     }
 
-    // Registra la risposta del sondaggio
+    // Registra la risposta
     trackingData.comics[currentComicIndex].pollAnswers[question] = response;
-
-    // Salva i dati aggiornati in localStorage
     localStorage.setItem('trackingData', JSON.stringify(trackingData));
-
-    console.log("Tracking Data After:", trackingData);
 }
+
 function updatePoints(points) {
     userPoints += points;
     trackingData.totalPoints = userPoints;
@@ -174,15 +166,12 @@ document.getElementById('submit-comment').addEventListener('click', () => {
 
 updateComic();
 document.getElementById('consent-button').addEventListener('click', () => {
-    console.log("Consent button clicked"); // Debug
-
     const fullscreenImage = document.getElementById('fullscreen-image');
     fullscreenImage.classList.remove('hidden');
 
     setTimeout(() => {
         fullscreenImage.classList.add('hidden');
         setTimeout(() => {
-            console.log("Redirecting to summary.html");
             window.location.href = 'summary.html';
         }, 1);
     }, 6000);
