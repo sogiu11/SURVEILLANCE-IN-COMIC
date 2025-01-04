@@ -1,20 +1,37 @@
 // Retrieve Tracking Data from LocalStorage
 const trackingData = JSON.parse(localStorage.getItem('trackingData')) || { comics: [], totalInteractions: 0, totalPoints: 0 };
 
+// Check if trackingData is valid
+if (!trackingData || typeof trackingData !== 'object') {
+    console.error("No valid tracking data found in localStorage.");
+}
+
 // Display Points
 const pointsDisplayElement = document.getElementById('points-display');
 const pointBarElement = document.getElementById('point-bar');
-pointsDisplayElement.textContent = `Points: ${trackingData.totalPoints || 0}`;
-pointBarElement.style.width = `${Math.min(trackingData.totalPoints || 0, 100)}%`;
+if (trackingData.totalPoints !== undefined) {
+    pointsDisplayElement.textContent = `Points: ${trackingData.totalPoints}`;
+    pointBarElement.style.width = `${Math.min(trackingData.totalPoints, 100)}%`;
 
-if (trackingData.totalPoints >= 100) {
-    pointBarElement.classList.add('complete');
+    if (trackingData.totalPoints >= 100) {
+        pointBarElement.classList.add('complete');
+    }
+} else {
+    pointsDisplayElement.textContent = `Points: 0`;
+    pointBarElement.style.width = '0%';
 }
 
 // Display Time Spent
 const timeSpentElement = document.getElementById('time-spent');
-const totalTimeSpent = trackingData.comics.reduce((sum, comic) => sum + (comic.timeSpent || 0), 0);
-timeSpentElement.textContent = `Total Time Spent: ${totalTimeSpent} seconds`;
+if (trackingData.comics && Array.isArray(trackingData.comics)) {
+    const totalTimeSpent = trackingData.comics.reduce(
+        (sum, comic) => sum + (comic.timeSpent || 0),
+        0
+    );
+    timeSpentElement.textContent = `Total Time Spent: ${totalTimeSpent} seconds`;
+} else {
+    timeSpentElement.textContent = `Total Time Spent: 0 seconds`;
+}
 
 // Display Poll Responses
 const interactionSummaryElement = document.getElementById('interaction-summary');
