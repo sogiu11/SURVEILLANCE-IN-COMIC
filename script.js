@@ -135,16 +135,3 @@ document.getElementById('submit-comment').addEventListener('click', () => {
 });
 
 updateComic();
-
-document.getElementById('consent-button').addEventListener('click', () => {
-    const fullscreenImage = document.getElementById('fullscreen-image');
-    fullscreenImage.classList.remove('hidden'); // Mostra immagine
-
-    // Dopo 6 secondi nasconde l'immagine e apre il secondo sito
-    setTimeout(() => {
-        fullscreenImage.classList.add('hidden');
-        setTimeout(() => {
-            window.location.href = 'summary.html'; // Reindirizza alla seconda pagina
-        }, 1000); // Piccola pausa per animazione
-    }, 6000); // Tempo di visualizzazione
-});
