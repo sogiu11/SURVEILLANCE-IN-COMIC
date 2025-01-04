@@ -48,10 +48,19 @@ const comics = [
 
 let currentComicIndex = 0;
 let userPoints = 0;
-let trackingData = JSON.parse(localStorage.getItem('trackingData')) || { comics: [], totalInteractions: 0, totalPoints: 0 };
+let trackingData = JSON.parse(localStorage.getItem('trackingData'));
+
+if (!trackingData || typeof trackingData !== 'object') {
+    trackingData = { comics: [], totalInteractions: 0, totalPoints: 0 };
+}
 
 function updateComic() {
     const comic = comics[currentComicIndex];
+    if (!comic) {
+        console.error(`Comic at index ${currentComicIndex} not found.`);
+        return;
+    }
+
     console.log("Updating comic:", comic);
 
     document.getElementById('current-comic').src = comic.src;
@@ -95,7 +104,12 @@ function recordPoll(question, response) {
     console.log("Current Comic Index:", currentComicIndex);
     console.log("Tracking Data Before:", trackingData);
 
-    // Assicurati che l'array trackingData.comics abbia un elemento per currentComicIndex
+    // Assicurati che trackingData.comics sia un array
+    if (!Array.isArray(trackingData.comics)) {
+        trackingData.comics = [];
+    }
+
+    // Assicurati che esista un oggetto per il currentComicIndex
     if (!trackingData.comics[currentComicIndex]) {
         trackingData.comics[currentComicIndex] = { pollAnswers: {}, interactions: [] };
     }
@@ -108,7 +122,6 @@ function recordPoll(question, response) {
 
     console.log("Tracking Data After:", trackingData);
 }
-
 function updatePoints(points) {
     userPoints += points;
     trackingData.totalPoints = userPoints;
