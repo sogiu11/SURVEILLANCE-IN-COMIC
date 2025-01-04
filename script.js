@@ -77,13 +77,18 @@ function updateComic() {
         });
     });
 }
-
+console.log("Poll buttons created for:", question);
 function recordPoll(question, response) {
+    console.log("Current Comic Index:", currentComicIndex);
+    console.log("Tracking Data Before:", trackingData);
+
     if (!trackingData.comics[currentComicIndex]) {
-        trackingData.comics[currentComicIndex] = { pollAnswers: {}, comments: [] };
+        trackingData.comics[currentComicIndex] = { pollAnswers: {}, interactions: [] };
     }
     trackingData.comics[currentComicIndex].pollAnswers[question] = response;
     localStorage.setItem('trackingData', JSON.stringify(trackingData));
+
+    console.log("Tracking Data After:", trackingData);
 }
 
 function updatePoints(points) {
