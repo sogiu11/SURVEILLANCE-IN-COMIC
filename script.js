@@ -174,13 +174,18 @@ document.getElementById('submit-comment').addEventListener('click', () => {
 
 updateComic();
 document.getElementById('consent-button').addEventListener('click', () => {
-    const fullscreenImage = document.getElementById('fullscreen-image');
-    fullscreenImage.classList.remove('hidden');
+    console.log("Consent button clicked"); // Debug
 
+    // Mostra l'immagine con l'effetto zoom-in
+    const fullscreenImage = document.getElementById('fullscreen-image');
+    fullscreenImage.classList.add('visible'); // Aggiungi classe "visible" per attivare il CSS
+
+    // Dopo un tempo determinato (6 secondi), reindirizza alla seconda pagina
     setTimeout(() => {
-        fullscreenImage.classList.add('hidden');
+        fullscreenImage.classList.remove('visible'); // Rimuovi lo zoom-in
         setTimeout(() => {
-            window.location.href = 'summary.html';
-        }, 1);
-    }, 6000);
+            console.log("Redirecting to summary.html"); // Debug
+            window.location.href = 'summary.html'; // Reindirizza al secondo sito
+        }, 1000); // Tempo di completamento dell'effetto zoom-in
+    }, 6000); // Tempo di visualizzazione dell'immagine
 });
