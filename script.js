@@ -1,45 +1,43 @@
-// Updated JavaScript to address issues and ensure functionality
-
 const comics = [
-    { 
-        src: 'comic1.jpg', 
-        caption: 'What Remains of Defiance?', 
+    {
+        src: 'comic1.jpg',
+        caption: 'What Remains of Defiance?',
         poll: [
             'Will the fight for freedom always remain a never-ending struggle?',
             'Does excessive surveillance destroy urban communities?',
             'Is it still important to resist when everything seems lost?'
         ]
     },
-    { 
-        src: 'comic2.jpg', 
-        caption: 'Surveillance Capitalism in Action', 
+    {
+        src: 'comic2.jpg',
+        caption: 'Surveillance Capitalism in Action',
         poll: [
             'Is surveillance necessary even in peaceful places like the mountains?',
             'Can meditation truly be free in a heavily monitored environment?',
             'Is technology gradually diminishing our sense of personal freedom?'
         ]
     },
-    { 
-        src: 'comic3.jpg', 
-        caption: 'The Age of Algorithms', 
+    {
+        src: 'comic3.jpg',
+        caption: 'The Age of Algorithms',
         poll: [
             'Should algorithms have control over education?',
             'Is it possible to rediscover critical thinking in a world dominated by algorithmic optimization?',
             'Is individual curiosity strong enough to challenge technological control?'
         ]
     },
-    { 
-        src: 'comic4.jpg', 
-        caption: 'The World of Tomorrow?', 
+    {
+        src: 'comic4.jpg',
+        caption: 'The World of Tomorrow?',
         poll: [
             'Do you believe that algorithms have too much control on our life?',
             'Do you think a society like the one depicted in the comic is a realistic future scenario?',
             'Can humanity reclaim its freedom of thought in a world dominated by surveillance?'
         ]
     },
-    { 
-        src: 'comic5.jpg', 
-        caption: 'Fractured Privacy"**', 
+    {
+        src: 'comic5.jpg',
+        caption: 'Fractured Privacy',
         poll: [
             'Is privacy still a human right in a fully digital world?',
             'Can society survive without technology for a single day?',
@@ -137,19 +135,16 @@ document.getElementById('submit-comment').addEventListener('click', () => {
 });
 
 updateComic();
+
 document.getElementById('consent-button').addEventListener('click', () => {
-    console.log("Consent button clicked"); // Debug
-
-    // Mostra l'immagine full-screen
     const fullscreenImage = document.getElementById('fullscreen-image');
-    fullscreenImage.classList.remove('hidden');
+    fullscreenImage.classList.remove('hidden'); // Mostra immagine
 
-    // Dopo 3 secondi, applica lo zoom-in e reindirizza
+    // Dopo 6 secondi nasconde l'immagine e apre il secondo sito
     setTimeout(() => {
-        fullscreenImage.classList.add('hidden'); // Attiva lo zoom-in
+        fullscreenImage.classList.add('hidden');
         setTimeout(() => {
-            console.log("Redirecting to summary.html"); // Debug
-            window.location.href = 'summary.html'; // Reindirizza al secondo sito
-        }, 1); // Tempo per completare lo zoom-in
-    }, 6000); // Tempo di visualizzazione iniziale
+            window.location.href = 'summary.html'; // Reindirizza alla seconda pagina
+        }, 1000); // Piccola pausa per animazione
+    }, 6000); // Tempo di visualizzazione
 });
