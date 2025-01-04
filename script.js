@@ -47,33 +47,43 @@ const comics = [
 ];
 
 let currentComicIndex = 0;
-let userPoints = trackingData.totalPoints || 0;
 let trackingData = JSON.parse(localStorage.getItem('trackingData')) || { comics: [], totalInteractions: 0, totalPoints: 0 };
+let userPoints = trackingData.totalPoints || 0;
 
 function updateComic() {
     const comic = comics[currentComicIndex];
-    document.getElementById('current-comic').src = comic.src;
-    document.getElementById('comic-caption').textContent = `Comic ${currentComicIndex + 1}: ${comic.caption}`;
-
+    const comicImage = document.getElementById('current-comic');
+    const comicCaption = document.getElementById('comic-caption');
     const pollContainer = document.getElementById('poll-container');
-    pollContainer.innerHTML = '';
 
-    comic.poll.forEach(question => {
-        const questionElem = document.createElement('p');
-        questionElem.textContent = question;
-        pollContainer.appendChild(questionElem);
+    // Aggiorna immagine e didascalia
+    if (comicImage && comicCaption) {
+        comicImage.src = comic.src;
+        comicImage.alt = comic.caption;
+        comicCaption.textContent = `Comic ${currentComicIndex + 1}: ${comic.caption}`;
+    }
 
-        ['Agree', 'Neutral', 'Disagree'].forEach(choice => {
-            const button = document.createElement('button');
-            button.textContent = choice;
-            button.onclick = () => {
-                recordPoll(question, choice);
-                alert(`You selected "${choice}" for: ${question}`);
-                updatePoints(10);
-            };
-            pollContainer.appendChild(button);
+    // Resetta e popola il contenitore dei poll
+    if (pollContainer) {
+        pollContainer.innerHTML = ''; // Pulisci il contenuto precedente
+
+        comic.poll.forEach(question => {
+            const questionElem = document.createElement('p');
+            questionElem.textContent = question;
+            pollContainer.appendChild(questionElem);
+
+            ['Agree', 'Neutral', 'Disagree'].forEach(choice => {
+                const button = document.createElement('button');
+                button.textContent = choice;
+                button.onclick = () => {
+                    recordPoll(question, choice);
+                    alert(`You selected "${choice}" for: ${question}`);
+                    updatePoints(10);
+                };
+                pollContainer.appendChild(button);
+            });
         });
-    });
+    }
 }
 
 function recordPoll(question, response) {
@@ -134,20 +144,24 @@ document.getElementById('submit-comment').addEventListener('click', () => {
     }
 });
 
-updateComic();
 document.getElementById('consent-button').addEventListener('click', () => {
     console.log("Consent button clicked"); // Debug
-
-    // Mostra l'immagine full-screen
     const fullscreenImage = document.getElementById('fullscreen-image');
-    fullscreenImage.classList.remove('hidden');
+    if (fullscreenImage) {
+        fullscreenImage.classList.remove('hidden'); // Mostra l'immagine
+        fullscreenImage.style.transform = 'scale(1)'; // Assicurati che non sia ingrandita inizialmente
 
-    // Dopo 3 secondi, applica lo zoom-in e reindirizza
-    setTimeout(() => {
-        fullscreenImage.classList.add('hidden'); // Attiva lo zoom-in
+        // Esegui lo zoom-in e reindirizza
         setTimeout(() => {
-            console.log("Redirecting to summary.html"); // Debug
-            window.location.href = 'summary.html'; // Reindirizza al secondo sito
-        }, 1000); // Tempo per completare lo zoom-in
-    }, 6000); // Tempo di visualizzazione iniziale
+            fullscreenImage.classList.add('hidden'); // Nasconde l'immagine
+            setTimeout(() => {
+                console.log("Redirecting to summary.html"); // Debug
+                window.location.href = 'summary.html'; // Reindirizza
+            }, 1000); // Tempo per completare l'animazione
+        }, 6000); // Mostra per 6 secondi
+    } else {
+        console.error("Fullscreen image element not found!");
+    }
 });
+
+updateComic();
